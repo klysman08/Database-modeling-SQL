@@ -29,3 +29,8 @@ WHERE ano_prod > 1989 and ano_prod < 2000 and titulo_principal LIKE '%Tom Hanks%
 SELECT titulo_principal, nome, ano_prod
 FROM "prod", "partic", "pessoa"
 WHERE "prod".id_prod = "partic".id_prod and "pessoa".id_pessoa = "partic".id_pessoa and nome LIKE '%Tom Hanks%';
+
+-- FIlmes com Tom Hanks e ano de produção somente em 2000 e 1999;
+SELECT DISTINCT titulo_principal, nome, ano_prod
+FROM "prod", "partic", "pessoa"
+WHERE "prod".id_prod = "partic".id_prod and "pessoa".id_pessoa = "partic".id_pessoa and nome LIKE '%Tom Hanks%' and ano_prod IN ('2000', '1999');
