@@ -3,7 +3,7 @@ SELECT ano_prod, AVG (avaliacao)
 FROM prod
 WHERE ano_prod > 1990
 GROUP BY ano_prod
-HAVING AVG (avaliacao) < 6.5 LIMIT 10;
+HAVING AVG (avaliacao) > 6.5 LIMIT 10;
 
 -- Selecionando filmes com titulo de produção contendo a string new e ano de produção maior que 1990
 SELECT titulo_principal, avaliacao
@@ -31,6 +31,32 @@ FROM "prod", "partic", "pessoa"
 WHERE "prod".id_prod = "partic".id_prod and "pessoa".id_pessoa = "partic".id_pessoa and nome LIKE '%Tom Hanks%';
 
 -- FIlmes com Tom Hanks e ano de produção somente em 2000 e 1999;
-SELECT DISTINCT titulo_principal, nome, ano_prod
+SELECT DISTINCT prod.titulo_principal, pessoa.nome AS ator_principal, prod.ano_prod
 FROM "prod", "partic", "pessoa"
 WHERE "prod".id_prod = "partic".id_prod and "pessoa".id_pessoa = "partic".id_pessoa and nome LIKE '%Tom Hanks%' and ano_prod IN ('2000', '1999');
+
+SELECT DISTINCT prod.titulo_principal, pessoa.nome AS ator_principal, prod.ano_prod
+FROM prod join partic on prod.id_prod = partic.id_prod join pessoa on pessoa.id_pessoa = partic.id_pessoa
+WHERE pessoa.nome LIKE '%Tom Hanks%' and prod.ano_prod IN ('2000', '1999');
+
+SELECT ano_prod, COUNT(*) as num_filmes
+FROM prod GROUP BY ano_prod HAVING COUNT(*) > 60000 ORDER BY ano_prod DESC;
+
+--Filmes que Tom Hanks participou e ano de produção agrupados com mais de 5 participações.
+SELECT  pessoa.nome, prod.ano_prod, COUNT(prod.ano_prod)
+FROM prod left join partic on prod.id_prod = partic.id_prod join pessoa on pessoa.id_pessoa = partic.id_pessoa
+WHERE pessoa.nome LIKE '%Tom Hanks%' 
+GROUP BY prod.ano_prod, pessoa.nome
+HAVING COUNT(prod.ano_prod) > 5;
+
+--Criando uma tabela temporaria com WITH para generos de filmes Action e Drama unindo as tabelas 
+WITH 
+action_genero AS (SELECT * FROM genero WHERE genero.genero LIKE '%Action%'),
+drama_genero AS (SELECT * FROM genero WHERE genero.genero LIKE '%Drama%')
+SELECT *
+FROM action_genero 
+
+UNION 
+
+SELECT *
+FROM drama_genero LIMIT 100;
