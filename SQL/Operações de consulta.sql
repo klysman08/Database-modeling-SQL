@@ -59,4 +59,10 @@ FROM action_genero
 UNION 
 
 SELECT *
-FROM drama_genero LIMIT 100;
+FROM drama_genero LIMIT 100; 
+
+
+select count(*)
+from pessoa
+where ano_nasc is null
+and ano_morte is null
