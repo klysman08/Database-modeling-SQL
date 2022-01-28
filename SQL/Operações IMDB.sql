@@ -324,26 +324,26 @@ ORDER BY count DESC;
 
 
 -- Determinar a produção do tipo ‘tvSeries’ ou ‘tvMiniSeries’ que tem a maior quantidade de episódios.
-SELECT titulo_principal, count(*)
+SELECT titulo_original, count(*)
 FROM "prod", "episodio"
-WHERE "prod".id_prod = "episodio".id_prod and
-tipo_prod = 'tvSeries' or tipo_prod = 'tvMiniSeries'
-GROUP BY titulo_principal
+WHERE "prod".id_prod = "episodio".id_prod_principal and
+(tipo_prod = 'tvSeries' or tipo_prod = 'tvMiniSeries')
+GROUP BY titulo_original
 ORDER BY count DESC;
 
 -- Determinar a produção do tipo ‘tvSeries’ ou ‘tvMiniSeries’ que tem a menor quantidade de episódios.
-SELECT titulo_principal, count(*)
+SELECT titulo_original, count(*)
 FROM "prod", "episodio"
-WHERE "prod".id_prod = "episodio".id_prod and
-tipo_prod = 'tvSeries' or tipo_prod = 'tvMiniSeries'
-GROUP BY titulo_principal
+WHERE "prod".id_prod = "episodio".id_prod_principal and
+(tipo_prod = 'tvSeries' or tipo_prod = 'tvMiniSeries')
+GROUP BY titulo_original
 ORDER BY count ASC;
 
 -- Determinar a duração média, mínima e máxima dos episódios de ‘tvSeries’.
-SELECT avg(tempo_minutos), min(tempo_minutos), max(tempo_minutos)
+SELECT titulo_original, avg(tempo_minutos) as avg, min(tempo_minutos), max(tempo_minutos)
 FROM "prod", "episodio"
-WHERE "prod".id_prod = "episodio".id_prod
-GROUP BY titulo_principal 
+WHERE "prod".id_prod = "episodio".id_prod and tempo_minutos IS NOT NULL
+GROUP BY titulo_original
 ORDER BY avg DESC ;
 
 -- Determinar a duração média, mínima e máxima dos episódios de ‘tvSeries’ com valores not NULL
@@ -366,9 +366,9 @@ ORDER BY count DESC;
 -- Determinar a serie que teva mais temporadas.
 SELECT titulo_principal, count(*)
 FROM "prod", "episodio"
-WHERE "prod".id_prod = "episodio".id_prod and
-tipo_prod = 'tvSeries'
-GROUP BY titulo_principal;
+WHERE "prod".id_prod = "episodio".id_prod_principal 
+GROUP BY titulo_principal
+order by count DESC;
 
 
 -- Determinar a produção do tipo ‘movie’ que tem duração mais longa. 
