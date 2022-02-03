@@ -23,6 +23,11 @@ CREATE TABLE VENDA (
     FOREIGN KEY (CP) REFERENCES PRODUTO(CP) ON DELETE CASCADE
 );
 
+-- criar tabela CAT_COMP, colunas CATEG, DESCR_CATEGORIA, CATEG como chave primaria
+CREATE TABLE CAT_COMP (
+    CATEG VARCHAR(50) NOT NULL PRIMARY KEY,
+    DESCR_CATEGORIA VARCHAR(50) NOT NULL
+);
 -- criar tabela COMPONENTE, colunas CAMPO, DESCR, CATEG, QUANT_ESTOQUE, CUSTO, FORN e COMPO como chave primaria
 CREATE TABLE COMPONENTE (
     CAMPO INTEGER NOT NULL PRIMARY KEY,
@@ -30,15 +35,10 @@ CREATE TABLE COMPONENTE (
     CATEG VARCHAR(50) NOT NULL,
     QUANT_ESTOQUE INTEGER NOT NULL,
     CUSTO FLOAT NOT NULL,
-    FORN VARCHAR(50) NOT NULL
+    FORN VARCHAR(50) NOT NULL,
     FOREIGN KEY (CATEG) REFERENCES CAT_COMP(CATEG)
 );
 
--- criar tabela CAT_COMP, colunas CATEG, DESCR_CATEGORIA, CATEG como chave primaria
-CREATE TABLE CAT_COMP (
-    CATEG VARCHAR(50) NOT NULL PRIMARY KEY,
-    DESCR_CATEGORIA VARCHAR(50) NOT NULL
-);
 
 -- criar tabela FORNEC, colunas CNPJ, RAZAO_SOCIAL, TELEFONE, URL, CNPJ como chave primaria
 CREATE TABLE FORNEC (
@@ -97,4 +97,23 @@ AND componente.campo = comp_prod.campo
 GROUP BY cat_comp.categ, descr_categoria;
 
 
+-- aumentar os valores de custo em 10% de todos os componentes onde categ = "SEMICOND"
+UPDATE componente
+SET custo = custo * 1.1
+WHERE categ = "SEMICOND";
 
+-- Reduzir os valores de custo em 5% de todos os componentes exeto onde categ = "SEMICOND"
+UPDATE componente
+SET custo = custo * 0.95
+WHERE categ != "SEMICOND";
+
+-- Remover o produto onde cp = 37711321
+DELETE FROM produto
+WHERE cp = 37711321;
+
+-- listar os cp e as quant total de cada produto vendido no ano de 2021, incluindo aqueles sem vendas
+SELECT cp, SUM(quant)
+FROM venda
+WHERE YEAR(data) = 2021
+GROUP BY cp
+ORDER BY SUM(quant) DESC;
