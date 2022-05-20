@@ -89,6 +89,8 @@ AND componente.campo = comp_prod.campo
 GROUP BY nomeprod
 HAVING SUM(custo * quant) > 100;
 
+
+
 -- Calcular e apresentar o custo médio os componentes para cada categoria (categ e descr_categoria)
 SELECT cat_comp.categ, descr_categoria, SUM(custo * quant) / SUM(quant) as Media
 FROM cat_comp, componente, comp_prod
@@ -117,3 +119,5 @@ FROM venda
 WHERE YEAR(data) = 2021
 GROUP BY cp
 ORDER BY SUM(quant) DESC;
+
+
